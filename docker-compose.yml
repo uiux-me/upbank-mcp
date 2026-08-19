@@ -1,0 +1,14 @@
+services:
+  upbank-mcp:
+    build: .
+    image: upbank-mcp:latest
+    environment:
+      # Interpolated from .env in this directory, which compose loads automatically.
+      UP_API_TOKEN: ${UP_API_TOKEN:?set UP_API_TOKEN in .env — see .env.example}
+      MCP_TRANSPORT: http
+      MCP_PORT: 8000
+    ports:
+      # Bound to loopback: this server exposes your bank data unauthenticated.
+      # Override the host port with MCP_HOST_PORT if 8000 is taken.
+      - "127.0.0.1:${MCP_HOST_PORT:-8000}:8000"
+    restart: unless-stopped
